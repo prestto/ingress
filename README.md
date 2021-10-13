@@ -11,6 +11,8 @@ Contents:
   - [HTTPS](#https)
     - [Cert-manager / Let's encrypt](#cert-manager--lets-encrypt)
     - [add TLS to the deployment](#add-tls-to-the-deployment)
+    - [Remarks](#remarks)
+    - [Check TLS](#check-tls)
   - [Refs](#refs)
 
 ## Controller
@@ -67,6 +69,18 @@ spec:
   - hosts:
       - tom-preston.co.uk
     secretName: tls-secret
+```
+
+### Remarks
+
+- Note that secrets in k8S are only available in the same NS.  Thus is secrets for the TLS must be in the same NS as the ingress controller!
+- Ingress rules must reside in the same namespace as their apps.
+
+### Check TLS
+
+```bash
+# https://serverfault.com/questions/661978/displaying-a-remote-ssl-certificate-details-using-cli-tools
+echo | openssl s_client -showcerts -servername profile.tom-preston.co.uk -connect profile.tom-preston.co.uk:443 2>/dev/null | openssl x509 -inform pem -noout -text
 ```
 
 ## Refs
